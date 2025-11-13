@@ -49,7 +49,11 @@ class CreateWorkout():
     'ask_exercise_name': 'What is the exercise name? ',
     'ask_exercise_name_error': 'Enter a valid name!\n',
     'ask_exercise_series': 'How many series? ',
-    'ask_exercise_series_no_series': 'You must select one serie'
+    'ask_exercise_series_no_series': 'You must select one serie',
+    'ask_exercise_reps_min': 'How many minimum reps?',
+    'ask_exercise_reps_max': 'How many maximum reps?',
+    'ask_exercise_reps_not_number': 'Type only numbers!\n',
+    'ask_exercise_reps_no_rep': 'You must select one rep'
   }
 
   def __init__(self):
@@ -130,5 +134,21 @@ class CreateWorkout():
         continue
       exercise_series = int(exercise_series_input)
     return exercise_series
+  
+  def ask_exercise_reps(self):
+    exercise_reps_min = 0
+    exercise_reps_max = 0
+    while exercise_reps_min <= 0 or exercise_reps_max <= 0:
+      exercise_reps_min_input = input(self.create_workout_messages['ask_exercise_reps_min'])
+      exercise_reps_max_input = input(self.create_workout_messages['ask_exercise_reps_max'])
+      check_inputs_not_numbers = not exercise_reps_min_input.isdigit() or not exercise_reps_max_input.isdigit() 
+      if check_inputs_not_numbers:
+        print(self.create_workout_messages['ask_exercise_reps_not_number'])
+        continue
+      exercise_reps_min_input_int = int(exercise_reps_min_input)
+      exercise_reps_max_input_int = int(exercise_reps_max_input)
+      exercise_reps_min = exercise_reps_min_input_int
+      exercise_reps_max = exercise_reps_max_input_int
+    return exercise_reps_min, exercise_reps_max
 
 Menu()
