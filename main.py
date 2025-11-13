@@ -19,9 +19,7 @@ class Menu():
 
       if user_option in ['1', 'create', 'create workout']:
         create = CreateWorkout()
-        create.workout_data['name'] = create.ask_workout_name()
-        create.workout_data['days'] = create.ask_workout_days()
-        break
+        create.build_workout()
       elif user_option in ['2', 'edit', 'edit workout']:
         print('edit workout')
         break
@@ -40,20 +38,25 @@ class Menu():
 
   
 class CreateWorkout():
+  days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+
   create_workout_messages = {
     'ask_workout_name': 'What is the name of the workout?\n\n',
     'ask_workout_name_empty': 'Workout name cannot be empty!\n',
     'choose_day': 'Choose the day or type [d]one if finished: ',
     'choose_day_empty': 'You must select at least one day!',
     'choose_day_invalid': 'Select a valid day!\n',
+    'available_days': 'Available days:',
     'ask_exercise_name': 'What is the exercise name? ',
     'ask_exercise_name_invalid': 'Enter a valid exercise name.\n',
+    'ask_another_exercise': 'Add another exercise for this day? (y/n): ',
     'ask_exercise_series': 'How many series? ',
     'ask_exercise_series_empty': 'You must enter at least one series',
     'ask_exercise_reps_min': 'How many minimum reps?',
     'ask_exercise_reps_max': 'How many maximum reps?',
     'ask_exercise_reps_not_number': 'Type only numbers!\n',
-    'ask_exercise_reps_empty': 'You must enter at least one rep.'
+    'ask_exercise_reps_empty': 'You must enter at least one rep.',
+    'workout_complete': '\nWorkout creation complete!\n'
   }
 
   def __init__(self):
@@ -83,36 +86,6 @@ class CreateWorkout():
       else:
         workout_name = workout_name_input.strip().title()
     return workout_name
-  
-  def ask_workout_days(self):
-    day_name_options = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-    num_selected_days = 0
-    chosen_day = ''
-    while not chosen_day:
-      for index, day_option in enumerate(day_name_options):
-        print(f'{index})', day_option.capitalize())
-      
-      print()
-      day_input = input(self.create_workout_messages['choose_day']).strip().lower()
-      
-      if day_input in ['d', 'done'] and num_selected_days == 0:
-        print(self.create_workout_messages['choose_day_empty'])
-        continue
-      elif day_input in ['d', 'done']:
-        break
-      else:
-        if day_input.isdigit():
-          index = int(day_input)
-          if index >= 0 and index < len(day_name_options):
-            chosen_day = day_name_options[index]
-            num_selected_days += 1
-        elif day_input in day_name_options:
-          chosen_day = day_input
-          num_selected_days += 1
-        else:
-          print(self.create_workout_messages['choose_day_invalid'])
-          continue
-      break
 
   def ask_exercise_name(self):
     exercise_name = ''
@@ -154,5 +127,52 @@ class CreateWorkout():
       exercise_reps_min = exercise_reps_min_input_int
       exercise_reps_max = exercise_reps_max_input_int
     return exercise_reps_min, exercise_reps_max
-
+  
+  def build_workout(self):
+    workout_name = self.ask_workout_name()
+    self.workout_data['name'] = workout_name
+    self.workout_data['days'] = {}
+    available_days = self.days.copy()
+    while available_days:
+      print(self.create_workout_messages['available_days'])
+      for i, day in enumerate(available_days):
+        print(f"{i}) {day.capitalize()}")
+      print()
+      day_input = input(self.create_workout_messages['choose_day']).strip().lower()
+      chosen_day = None
+      if day_input in ['d', 'done']:
+        if not self.workout_data['days']:
+          print(self.create_workout_messages['choose_day_empty'])
+          continue
+        else:
+          break
+      else:
+        if day_input.isdigit():
+          index = int(day_input)
+          if index >= 0 and index < len(available_days):
+            chosen_day = available_days[index]
+        elif day_input in available_days:
+          chosen_day = day_input
+        else:
+          print(self.create_workout_messages['choose_day_invalid'])
+          continue
+      if not chosen_day:
+        continue
+      self.workout_data['days'][chosen_day] = {'exercises': []}
+      while True:
+        exercise_name = self.ask_exercise_name()
+        series = self.ask_exercise_series()
+        reps_min, reps_max = self.ask_exercise_reps()
+        self.workout_data['days'][chosen_day]['exercises'].append({
+          'name': exercise_name,
+          'series': series,
+          'reps_min': reps_min,
+          'reps_max': reps_max
+        })
+        add_another = input(self.create_workout_messages['ask_another_exercise']).strip().lower()
+        if add_another not in ['y', 'yes']:
+          break
+      available_days.remove(chosen_day)
+    print(self.create_workout_messages['workout_complete'])
+      
 Menu()
