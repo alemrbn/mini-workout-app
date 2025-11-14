@@ -44,22 +44,22 @@ class CreateWorkout():
   days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
   create_workout_messages = {
-    'ask_workout_name': 'What is the name of the workout? ',
-    'invalid_workout_name': 'Enter a valid name.',
-    'ask_exercise_name': 'What is the exercise name? ',
-    'invalid_exercise_name': 'Enter a valid exercise name.',
-    'ask_another_exercise': 'Add another exercise for this day? [y]es or [n]ot: ',
-    'ask_exercise_series': 'How many series? ',
-    'empty_exercise_series': 'You must enter at least one series',
-    'ask_exercise_reps_min': 'How many minimum reps? ',
-    'ask_exercise_reps_max': 'How many maximum reps? ',
-    'invalid_exercise_reps': 'One or both inputs invalid.',
+    'ask_workout_name': 'What is the workout name? ',
+    'invalid_workout_name': 'Please enter a valid name.',
+    'ask_exercise_name': 'Enter the exercise name: ',
+    'invalid_exercise_name': 'Please enter a valid exercise name.',
+    'ask_another_exercise': 'Add another exercise for this day? [y]es / [n]o: ',
+    'ask_exercise_series': 'How many sets? ',
+    'empty_exercise_series': 'You must enter at least one set.',
+    'ask_exercise_reps_min': 'Minimum reps: ',
+    'ask_exercise_reps_max': 'Maximum reps: ',
+    'invalid_exercise_reps': 'Invalid input. Please enter valid numbers.',
     'available_days': 'Available days:',
-    'choose_day': 'Choose the day or type [d]one if finished: ',
-    'no_days_selected': 'You need to select at least one day.',
-    'invalid_day': 'Select a valid day.',
-    'complete_workout': '\nWorkout creation complete!\n'
-  }
+    'choose_day': 'Choose a day or type [d]one to finish: ',
+    'no_days_selected': 'You must select at least one day.',
+    'invalid_day': 'Please choose a valid day.',
+    'complete_workout': '\nWorkout created successfully!\n'
+}
 
   def __init__(self):
     self.workout_data = {}
@@ -130,9 +130,6 @@ class CreateWorkout():
           print(self.create_workout_messages['no_days_selected'])
           continue
         break
-      if day_input == '':
-        print(self.create_workout_messages['invalid_day'])
-        continue
       if day_input.isdigit():
         index = int(day_input)
         if index >= 0 and index < len(available_days):
@@ -165,11 +162,11 @@ class CreateWorkout():
 class ListWorkout():
   list_workout_messages = {
     'listed': 'Workouts',
-    'back': 'type [b]ack to back ',
-    'view_workout': 'What workout would you like to view? ',
-    'invalid_workout': 'Invalid workout!',
-    'empty_workout': 'No one workout for list.\n'
-  }
+    'back': 'Type [b]ack to return ',
+    'view_workout': 'Which workout would you like to view? ',
+    'invalid_workout': 'Invalid workout selection!',
+    'empty_workout': 'There are no workouts to list.\n'
+}
 
   def __init__(self):
     pass
