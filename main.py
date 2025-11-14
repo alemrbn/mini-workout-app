@@ -165,7 +165,7 @@ class CreateWorkout():
 class ListWorkout():
   list_workout_messages = {
     'listed': 'Workouts',
-    'back': '\ntype [b]ack to back ',
+    'back': 'type [b]ack to back ',
     'view_workout': 'What workout would you like to view? ',
     'invalid_workout': 'Invalid workout!',
     'empty_workout': 'No one workout for list.\n'
@@ -183,7 +183,7 @@ class ListWorkout():
       print()
       for i, workout in enumerate(all_workouts):
         print(f'{i})', workout['name'])
-      print(self.list_workout_messages['back'])
+      print(f"\n{self.list_workout_messages['back']}")
       workout_input = input(self.list_workout_messages['view_workout'])
       if workout_input in ['b', 'back']:
         break
@@ -193,7 +193,7 @@ class ListWorkout():
           selected_workout = all_workouts[index]
           while True:
             print(self.format_workout(selected_workout))
-            back = input(self.list_workout_messages['back'])
+            back = input(f"{self.list_workout_messages['back']}")
             if back in ['b', 'back']:
               break
         else:
@@ -212,8 +212,7 @@ class ListWorkout():
     for day, info in workout['days'].items():
       output += f'\n{day.capitalize()}:\n'
       for exercises in info['exercises']:
-        output += f"  - {exercises['name']}: {exercises['series']} series x {exercises['reps_min']}-{exercises['reps_max']} reps"
-
+        output += f"  - {exercises['name']}: {exercises['series']} series x {exercises['reps_min']}-{exercises['reps_max']} reps\n"
     return output
 
 Menu()
