@@ -195,8 +195,7 @@ class ListWorkout():
         if index >= 0 and index < available_workouts:
           selected_workout = all_workouts[index]
           while True:
-            print(f'{selected_workout['name']}\n')
-            print(selected_workout)
+            print(self.format_workout(selected_workout))
             back = input(self.list_workout_messages['back'])
             if back in ['b', 'back']:
               break
@@ -209,5 +208,17 @@ class ListWorkout():
       print(self.list_workout_messages['empty_workout'])
       return True
     return False
+  
+  def format_workout(self, workout):
+    workout_name = f"Workout: {workout['name']}\n"
+    output = workout_name
+    for day, info in workout['days'].items():
+      output += f'\n{day.capitalize()}:\n'
+      for exercises in info['exercises']:
+        output += f"  - {exercises['name']}: {exercises['series']} series x {exercises['reps_min']}-{exercises['reps_max']} reps"
+    
+    return output
+
+    
 
 Menu()
