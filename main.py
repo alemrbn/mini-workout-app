@@ -30,7 +30,7 @@ class Menu():
         print('delete workout')
         break
       elif user_option in ['4', 'list', 'list workout']:
-        list_workout = ListWorkout(create_workout)
+        list_workout = ListWorkout()
         list_workout.list_workouts()
       elif user_option in ['5', 'exit']:
         print('exit')
@@ -174,13 +174,16 @@ class ListWorkout():
     'back': '\ntype [b]ack to back '
   }
 
-  def __init__(self, create_instance):
-    self.create_instance = create_instance
+  def __init__(self):
+    pass
 
   def list_workouts(self):
     available_workouts = len(all_workouts)
-    print(self.list_workout_messages['listed'], f'({available_workouts}):\n')
+    if self.check_empty_workout(available_workouts):
+      return
+    print(self.list_workout_messages['listed'], f'({available_workouts}):')
     while True:
+      print()
       for i, workout in enumerate(all_workouts):
         print(f'{i})', workout['name'])
       print(self.list_workout_messages['back'])
@@ -190,10 +193,10 @@ class ListWorkout():
       if workout_input.isdigit():
         index = int(workout_input)
         if index >= 0 and index < available_workouts:
-          workout_input = all_workouts[index]
+          selected_workout = all_workouts[index]
           while True:
-            print(f'{workout_input['name']}\n')
-            print(workout_input)
+            print(f'{selected_workout['name']}\n')
+            print(selected_workout)
             back = input(self.list_workout_messages['back'])
             if back in ['b', 'back']:
               break
@@ -201,14 +204,10 @@ class ListWorkout():
           print(self.list_workout_messages['invalid_workout'])
           continue
 
+  def check_empty_workout(self, workouts):
+    if workouts == 0:
+      print(self.list_workout_messages['empty_workout'])
+      return True
+    return False
+
 Menu()
-
-
-
-# {
-#   'name': 'Asdsa', 
-#   'days': 
-#     {'monday': 
-#       {'exercises': [
-#         {'name': 'Asdasd', 'series': 2, 'reps_min': 2, 'reps_max': 2}
-#     ]}}}
