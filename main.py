@@ -46,8 +46,8 @@ class Menu():
         create_workout.build_workout()
         all_workouts.append(create_workout.workout_data)
       elif user_option in ['2', 'edit', 'edit workout']:
-        print('edit workout')
-        break
+        edit_workout = EditWorkout()
+        edit_workout.edit_workout()
       elif user_option in ['3', 'delete', 'delete workout']:
         delete_workout = DeleteWorkout()
         delete_workout.delete_workout()
@@ -82,7 +82,7 @@ class CreateWorkout():
     'no_days_selected': 'You must select at least one day.',
     'invalid_day': 'Please choose a valid day.',
     'complete_workout': 'Workout created successfully!\n'
-}
+  }
 
   def __init__(self):
     self.workout_data = {}
@@ -192,6 +192,69 @@ class CreateWorkout():
     clear_screen()
     print(self.create_workout_messages['complete_workout'])
 
+class EditWorkout():
+  edit_workout_messages = {
+    'ask_edit_workout': 'Which workout do you want to edit? ',
+    'available_for_edit': 'Available for editing:\n',
+    'ask_edit_workout_item': 'Which item do you want to edit? ',
+    'ask_new_workout_name':  'What name would you like to use? '
+  }
+
+  def __init__(self):
+    pass
+
+  def edit_workout(self):
+    clear_screen()
+    if check_empty_list(all_workouts):
+      return
+    listing = True
+    while listing:
+      print(f"{global_messages['listed_workouts']} ({len(all_workouts)}):\n")
+      for i, workout in enumerate(all_workouts):
+        print(f'{i})', workout['name'])
+      print(f"\n{global_messages['back']}")
+      edit_input = input(self.edit_workout_messages['ask_edit_workout'])
+      clear_screen()
+      if edit_input in ['b', 'back']:
+        listing = False
+        print(global_messages['welcome'])
+        continue
+      if edit_input.isdigit():
+        index = int(edit_input)
+        if index >= 0 and index < len(all_workouts):
+          selected_workout = all_workouts[index]
+          editing = True
+          while editing:
+            available_options = ['rename workout']
+            clear_screen()
+            workout_name_msg = f"Workout: {selected_workout['name']}\n"
+            print(workout_name_msg)
+            print(self.edit_workout_messages['available_for_edit'])
+            
+            for i, option in enumerate(available_options):
+              print(f'{i}) {option.title()}')
+
+            print(f"\n{global_messages['back']}")
+            edit_input_option = input(self.edit_workout_messages['ask_edit_workout_item'])
+
+            if edit_input_option in ['b', 'back']:
+              clear_screen()
+              break
+            
+            if edit_input_option == '0':
+              self.rename_workout(selected_workout, workout_name_msg)
+
+  def rename_workout(self, workout, title_msg):
+    under_development = '-== This menu is still under development.. ==-\n'
+    rename_workout_flag = True
+    while rename_workout_flag:
+      clear_screen()
+      print(under_development)
+      print(title_msg)
+      new_workout_name = input(self.edit_workout_messages['ask_new_workout_name'])
+      workout['name'] = new_workout_name.title().strip()
+      rename_workout_flag = False
+
 class DeleteWorkout():
   delete_workout_messages = {
     'ask_delete': 'Which workout do you wish to delete? ',
@@ -243,7 +306,7 @@ class DeleteWorkout():
 class ListWorkout():
   list_workout_messages = {
     'view_workout': 'Which workout would you like to view? '
-}
+  }
 
   def __init__(self):
     pass
