@@ -12,14 +12,17 @@ class Storage:
         if not os.path.exists(self.workouts_folder):
             os.makedirs(self.workouts_folder)
 
+        self.workouts = []
+
     def save_workout(self, workout):
         archive_name = f'{workout["name"]}.json'
         full_path = os.path.join(self.workouts_folder, archive_name)
         with open(full_path, "w", encoding="utf-8") as file:
             json.dump(workout, file, indent=4)
+        if workout not in self.workouts:
+            self.workouts.append(workout)
 
     def load_workouts(self):
-        from workout_manager import all_workouts
         self.archives = os.listdir(self.workouts_folder)
         self.json_archives = []
         for archive in self.archives:
@@ -29,12 +32,14 @@ class Storage:
             path = os.path.join(self.workouts_folder, archive)
             with open(path, "r", encoding="utf-8") as file:
                 workout = json.load(file)
-                all_workouts.append(workout)
+                if workout not in self.workouts:
+                    self.workouts.append(workout)
 
     def delete_workout(self, name):
         path = os.path.join(self.workouts_folder, f"{name}.json")
         if os.path.exists(path):
             os.remove(path)
+        self.workouts = [w for w in self.workouts if w["name"] != name]
 
     def rename_workout_file(self, old_name, new_name, workout_data):
         old_path = os.path.join(self.workouts_folder, f"{old_name}.json")

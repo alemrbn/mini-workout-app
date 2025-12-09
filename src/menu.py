@@ -3,8 +3,7 @@ from workout_manager import (
     CreateWorkout,
     EditWorkout,
     DeleteWorkout,
-    ListWorkout,
-    all_workouts
+    ListWorkout
 )
 
 
@@ -31,7 +30,6 @@ class Menu:
             if user_option in ['1', 'create', 'create workout']:
                 create_workout = CreateWorkout(self.storage)
                 create_workout.build_workout()
-                all_workouts.append(create_workout.workout_data)
             elif user_option in ['2', 'edit', 'edit workout']:
                 edit_workout = EditWorkout(self.storage)
                 edit_workout.edit_workout()
@@ -39,7 +37,7 @@ class Menu:
                 delete_workout = DeleteWorkout(self.storage)
                 delete_workout.delete_workout()
             elif user_option in ['4', 'list', 'list workout']:
-                ListWorkout().list_workouts()
+                ListWorkout(self.storage).list_workouts()
             elif user_option in ['5', 'exit']:
                 clear_screen()
                 exit()

@@ -1,0 +1,187 @@
+{
+    "name": "Al\u00ea Workout (Week 8)",
+    "days": {
+        "monday": {
+            "exercises": [
+                {
+                    "name": "Squat (Periodization)",
+                    "series": 5,
+                    "reps_min": 5,
+                    "reps_max": 5
+                },
+                {
+                    "name": "Pause Squat (70% 1Rm)",
+                    "series": 2,
+                    "reps_min": 6,
+                    "reps_max": 8
+                },
+                {
+                    "name": "Squat (80% 1Rm)",
+                    "series": 1,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Calf Raises",
+                    "series": 2,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Abs",
+                    "series": 2,
+                    "reps_min": 8,
+                    "reps_max": 12
+                }
+            ]
+        },
+        "tuesday": {
+            "exercises": [
+                {
+                    "name": "Bench Press (Periodization)",
+                    "series": 5,
+                    "reps_min": 5,
+                    "reps_max": 5
+                },
+                {
+                    "name": "Weight Dips",
+                    "series": 2,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Pull Up",
+                    "series": 3,
+                    "reps_min": 5,
+                    "reps_max": 5
+                },
+                {
+                    "name": "Dumbbell Row",
+                    "series": 2,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Strict Press",
+                    "series": 2,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Lats Raises",
+                    "series": 1,
+                    "reps_min": 10,
+                    "reps_max": 15
+                }
+            ]
+        },
+        "thursday": {
+            "exercises": [
+                {
+                    "name": "Deadlift (Periodization)",
+                    "series": 5,
+                    "reps_min": 5,
+                    "reps_max": 5
+                },
+                {
+                    "name": "Squat (70% 1Rm)",
+                    "series": 2,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Bulgarian Split",
+                    "series": 2,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Calf Raises",
+                    "series": 2,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Abs",
+                    "series": 1,
+                    "reps_min": 8,
+                    "reps_max": 12
+                }
+            ]
+        },
+        "friday": {
+            "exercises": [
+                {
+                    "name": "Pull Up",
+                    "series": 5,
+                    "reps_min": 5,
+                    "reps_max": 5
+                },
+                {
+                    "name": "Upperback Row",
+                    "series": 2,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Shoulder Press",
+                    "series": 2,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Dumbbell Press",
+                    "series": 1,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Lats Raises",
+                    "series": 1,
+                    "reps_min": 10,
+                    "reps_max": 15
+                },
+                {
+                    "name": "Rear Delt",
+                    "series": 1,
+                    "reps_min": 10,
+                    "reps_max": 15
+                }
+            ]
+        },
+        "saturday": {
+            "exercises": [
+                {
+                    "name": "Close Grip Bench (75% 1Rm)",
+                    "series": 2,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Hammer Curl",
+                    "series": 2,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Tr\u00edceps Extension",
+                    "series": 2,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "B\u00edceps Curl",
+                    "series": 1,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Wrist Curl",
+                    "series": 1,
+                    "reps_min": 5,
+                    "reps_max": 9
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "name": "Al\u00ea Workout (Week 10)",
+    "days": {
+        "monday": {
+            "exercises": [
+                {
+                    "name": "Squat (Periodization)",
+                    "series": 5,
+                    "reps_min": 5,
+                    "reps_max": 5
+                }
+            ]
+        },
+        "tuesday": {
+            "exercises": [
+                {
+                    "name": "Bench Press (Periodization)",
+                    "series": 5,
+                    "reps_min": 5,
+                    "reps_max": 5
+                }
+            ]
+        },
+        "wednesday": {
+            "exercises": [
+                {
+                    "name": "Deadlift (Periodization)",
+                    "series": 5,
+                    "reps_min": 5,
+                    "reps_max": 5
+                }
+            ]
+        }
+    }
+}

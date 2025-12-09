@@ -5,8 +5,6 @@ from utils import (
     list_workouts
 )
 
-all_workouts = []
-
 
 class CreateWorkout:
     DAYS = ['monday',
@@ -193,17 +191,17 @@ class EditWorkout:
 
     def edit_workout(self):
         clear_screen()
-        if check_empty_list(all_workouts):
+        if check_empty_list(self.storage.workouts):
             return
         listing = True
         while listing:
             print(
                 list_workouts(
                     global_messages['listed_workouts'],
-                    all_workouts
+                    self.storage.workouts
                 )
             )
-            for i, workout in enumerate(all_workouts):
+            for i, workout in enumerate(self.storage.workouts):
                 print(f'{i})', workout['name'])
             print(f"\n{global_messages['back']}")
             edit_input = input(self.EDIT_WORKOUT_MESSAGES['ask_edit_workout'])
@@ -214,8 +212,8 @@ class EditWorkout:
                 continue
             if edit_input.isdigit():
                 index = int(edit_input)
-                if index >= 0 and index < len(all_workouts):
-                    selected_workout = all_workouts[index]
+                if index >= 0 and index < len(self.storage.workouts):
+                    selected_workout = self.storage.workouts[index]
                     editing = True
                     while editing:
                         under_development = (
@@ -285,17 +283,17 @@ class DeleteWorkout:
 
     def delete_workout(self):
         clear_screen()
-        if check_empty_list(all_workouts):
+        if check_empty_list(self.storage.workouts):
             return
         listing = True
         while listing:
             print(
                 list_workouts(
                     global_messages['listed_workouts'],
-                    all_workouts
+                    self.storage.workouts
                 )
             )
-            for i, workout in enumerate(all_workouts):
+            for i, workout in enumerate(self.storage.workouts):
                 print(f'{i})', workout['name'])
             print(f"\n{global_messages['back']}")
             delete_input = input(self.DELETE_WORKOUT_MESSAGES['ask_delete'])
@@ -307,18 +305,17 @@ class DeleteWorkout:
             user_response = False
             if delete_input.isdigit():
                 index = int(delete_input)
-                if index >= 0 and index < len(all_workouts):
-                    workout_to_delete = all_workouts[index]
+                if index >= 0 and index < len(self.storage.workouts):
+                    workout_to_delete = self.storage.workouts[index]
                     workout_to_delete_name = workout_to_delete["name"]
                     while not user_response:
                         sure_or_not = input(
                             self.DELETE_WORKOUT_MESSAGES['ask_sure_delete']
                             )
                         if sure_or_not in ['y', 'yes']:
-                            del all_workouts[index]
+                            self.storage.delete_workout(workout_to_delete_name)
                             user_response = True
                             listing = False
-                            self.storage.delete_workout(workout_to_delete_name)
                             clear_screen()
                             print(
                                 self.DELETE_WORKOUT_MESSAGES[
@@ -341,21 +338,21 @@ class ListWorkout:
         'view_workout': 'Which workout would you like to view? '
     }
 
-    def __init__(self):
-        pass
+    def __init__(self, storage):
+        self.storage = storage
 
     def list_workouts(self):
         clear_screen()
-        if check_empty_list(all_workouts):
+        if check_empty_list(self.storage.workouts):
             return
         while True:
             print(
                 list_workouts(
                     global_messages['listed_workouts'],
-                    all_workouts
+                    self.storage.workouts
                 )
             )
-            for i, workout in enumerate(all_workouts):
+            for i, workout in enumerate(self.storage.workouts):
                 print(f'{i})', workout['name'])
             print(f"\n{global_messages['back']}")
             workout_input = input(self.LIST_WORKOUT_MESSAGES['view_workout'])
@@ -365,8 +362,8 @@ class ListWorkout:
                 break
             if workout_input.isdigit():
                 index = int(workout_input)
-                if index >= 0 and index < len(all_workouts):
-                    selected_workout = all_workouts[index]
+                if index >= 0 and index < len(self.storage.workouts):
+                    selected_workout = self.storage.workouts[index]
                     while True:
                         clear_screen()
                         print(self.format_workout(selected_workout))
