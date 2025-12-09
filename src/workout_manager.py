@@ -27,7 +27,7 @@ class CreateWorkout:
             '[y]es / [n]o: '
         ),
         'ask_exercise_series': 'How many sets? ',
-        'empty_exercise_series': 'You must enter at least one set.',
+        'invalid_exercise_series': 'You must enter at least one set.',
         'ask_exercise_reps_min': 'Minimum reps: ',
         'ask_exercise_reps_max': 'Maximum reps: ',
         'invalid_exercise_reps': 'Invalid input. Please enter valid numbers.',
@@ -41,6 +41,14 @@ class CreateWorkout:
     def __init__(self, storage):
         self.storage = storage
         self.workout_data = {}
+
+    def ask_valid_input(self, prompt, validate_func, error_msg):
+        while True:
+            value = input(prompt).strip()
+            try:
+                return validate_func(value)
+            except ValueError:
+                print(error_msg)
 
     def validate_workout_name(self, name):
         if not is_nonempty_string(name) or name.isdigit():
@@ -59,7 +67,7 @@ class CreateWorkout:
     def validate_series(self, value):
         if not value.isdigit() or int(value) <= 0:
             raise ValueError(self.CREATE_WORKOUT_MESSAGES[
-                'empty_exercise_series'
+                'invalid_exercise_series'
             ])
         return int(value)
 
@@ -79,71 +87,83 @@ class CreateWorkout:
 
     def ask_workout_name(self):
         clear_screen()
-        workout_name = ''
-        while not workout_name:
-            workout_name_input = input(
-                self.CREATE_WORKOUT_MESSAGES['ask_workout_name']
-                ).strip()
-            try:
-                workout_name = self.validate_workout_name(workout_name_input)
-            except ValueError:
-                print(self.CREATE_WORKOUT_MESSAGES['invalid_workout_name'])
-                continue
-        return workout_name
+        return self.ask_valid_input(
+            self.CREATE_WORKOUT_MESSAGES['ask_workout_name'],
+            self.validate_workout_name,
+            self.CREATE_WORKOUT_MESSAGES['invalid_workout_name']
+        )
 
     def ask_exercise_name(self):
         clear_screen()
-        exercise_name = ''
-        while not exercise_name:
-            exercise_name_input = input(
-                self.CREATE_WORKOUT_MESSAGES['ask_exercise_name']
-                ).strip()
-            try:
-                exercise_name = self.validate_exercise_name(
-                    exercise_name_input
-                    )
-            except ValueError:
-                print(self.CREATE_WORKOUT_MESSAGES['invalid_exercise_name'])
-                continue
-        return exercise_name
+        return self.ask_valid_input(
+            self.CREATE_WORKOUT_MESSAGES['ask_exercise_name'],
+            self.validate_exercise_name,
+            self.CREATE_WORKOUT_MESSAGES['invalid_exercise_name']
+        )
 
     def ask_exercise_series(self):
         clear_screen()
-        series = 0
-        while series <= 0:
-            series_input = input(
-                self.CREATE_WORKOUT_MESSAGES['ask_exercise_series']
-            ).strip()
-            try:
-                series = self.validate_series(series_input)
-            except ValueError:
-                print(self.CREATE_WORKOUT_MESSAGES['empty_exercise_series'])
-                continue
-        return series
+        return self.ask_valid_input(
+            self.CREATE_WORKOUT_MESSAGES['ask_exercise_series'],
+            self.validate_series,
+            self.CREATE_WORKOUT_MESSAGES['invalid_exercise_series']
+        )
 
     def ask_exercise_reps(self):
         clear_screen()
-        reps_min = 0
-        while reps_min <= 0:
-            reps_min_input = input(
-                self.CREATE_WORKOUT_MESSAGES['ask_exercise_reps_min']
-            ).strip()
-            try:
-                reps_min = self.validate_reps_min(reps_min_input)
-            except ValueError:
-                print(self.CREATE_WORKOUT_MESSAGES['invalid_exercise_reps'])
-                continue
-        reps_max = 0
-        while reps_max < reps_min:
-            reps_max_input = input(
-                self.CREATE_WORKOUT_MESSAGES['ask_exercise_reps_max']
-            ).strip()
-            try:
-                reps_max = self.validate_reps_max(reps_max_input, reps_min)
-            except ValueError:
-                print(self.CREATE_WORKOUT_MESSAGES['invalid_exercise_reps'])
-                continue
+        reps_min = self.ask_valid_input(
+            self.CREATE_WORKOUT_MESSAGES['ask_exercise_reps_min'],
+            self.validate_reps_min,
+            self.CREATE_WORKOUT_MESSAGES['invalid_exercise_reps']
+        )
+        reps_max = self.ask_valid_input(
+            self.CREATE_WORKOUT_MESSAGES['ask_exercise_reps_max'],
+            lambda value: self.validate_reps_max(value, reps_min),
+            self.CREATE_WORKOUT_MESSAGES['invalid_exercise_reps']
+        )
         return reps_min, reps_max
+
+    def ask_day(self, available_days):
+        while True:
+            print(self.CREATE_WORKOUT_MESSAGES['available_days'])
+            for i, day in enumerate(available_days):
+                print(f"{i}) {day.capitalize()}")
+            day_input = input(
+                self.CREATE_WORKOUT_MESSAGES['choose_day']
+            ).strip().lower()
+            if day_input in ['d', 'done']:
+                return 'done'
+            if day_input.isdigit():
+                index = int(day_input)
+                if 0 <= index < len(available_days):
+                    return available_days[index]
+            elif day_input in available_days:
+                return day_input
+            clear_screen()
+            print(self.CREATE_WORKOUT_MESSAGES['invalid_day'])
+
+    def ask_exercises_for_day(self, day):
+        while True:
+            exercise_name = self.ask_exercise_name()
+            series = self.ask_exercise_series()
+            reps_min, reps_max = self.ask_exercise_reps()
+            self.workout_data['days'][day]['exercises'].append({
+                'name': exercise_name,
+                'series': series,
+                'reps_min': reps_min,
+                'reps_max': reps_max
+            })
+            clear_screen()
+            add_another = input(
+                self.CREATE_WORKOUT_MESSAGES['ask_another_exercise']
+            ).strip().lower()
+            if add_another in ['n', 'no']:
+                clear_screen()
+                break
+            elif add_another in ['y', 'yes']:
+                clear_screen()
+            else:
+                continue
 
     def build_workout(self):
         workout_name = self.ask_workout_name()
@@ -152,60 +172,16 @@ class CreateWorkout:
         self.workout_data['days'] = {}
         available_days = self.DAYS.copy()
         while available_days:
-            print(self.CREATE_WORKOUT_MESSAGES['available_days'])
-            for i, day in enumerate(available_days):
-                print(f"{i}) {day.capitalize()}")
-            day_input = input(
-                self.CREATE_WORKOUT_MESSAGES['choose_day']
-                ).strip().lower()
-            chosen_day = None
-            if day_input in ['d', 'done']:
+            chosen_day = self.ask_day(available_days)
+            if chosen_day == 'done':
                 if not self.workout_data['days']:
                     clear_screen()
                     print(self.CREATE_WORKOUT_MESSAGES['no_days_selected'])
                     continue
                 break
-            if day_input.isdigit():
-                index = int(day_input)
-                if index >= 0 and index < len(available_days):
-                    chosen_day = available_days[index]
-                else:
-                    clear_screen()
-                    print(self.CREATE_WORKOUT_MESSAGES['invalid_day'])
-                    continue
-            elif day_input in available_days:
-                chosen_day = day_input
-            else:
-                clear_screen()
-                print(self.CREATE_WORKOUT_MESSAGES['invalid_day'])
-                continue
+
             self.workout_data['days'][chosen_day] = {'exercises': []}
-            ask_workout_infos_flag = True
-            while ask_workout_infos_flag:
-                exercise_name = self.ask_exercise_name()
-                series = self.ask_exercise_series()
-                reps_min, reps_max = self.ask_exercise_reps()
-                self.workout_data['days'][chosen_day]['exercises'].append({
-                    'name': exercise_name,
-                    'series': series,
-                    'reps_min': reps_min,
-                    'reps_max': reps_max
-                })
-                clear_screen()
-                ask_another_loop_flag = True
-                while ask_another_loop_flag:
-                    add_another = input(
-                        self.CREATE_WORKOUT_MESSAGES['ask_another_exercise']
-                        ).strip().lower()
-                    if add_another in ['y', 'yes']:
-                        clear_screen()
-                        ask_another_loop_flag = False
-                    elif add_another in ['no', 'n']:
-                        clear_screen()
-                        ask_another_loop_flag = False
-                        ask_workout_infos_flag = False
-                    else:
-                        continue
+            self.ask_exercises_for_day(chosen_day)
             available_days.remove(chosen_day)
         clear_screen()
         self.storage.save_workout(self.workout_data)
