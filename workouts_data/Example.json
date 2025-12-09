@@ -1,0 +1,95 @@
+{
+    "name": "Example",
+    "days": {
+        "monday": {
+            "exercises": [
+                {
+                    "name": "Bench Press",
+                    "series": 3,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Incline Bench Press",
+                    "series": 3,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Dips",
+                    "series": 3,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Lats Raises",
+                    "series": 3,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Triceps Extension",
+                    "series": 3,
+                    "reps_min": 10,
+                    "reps_max": 15
+                }
+            ]
+        },
+        "wednesday": {
+            "exercises": [
+                {
+                    "name": "Squat",
+                    "series": 3,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Lunges",
+                    "series": 3,
+                    "reps_min": 10,
+                    "reps_max": 15
+                },
+                {
+                    "name": "Calf Raises",
+                    "series": 4,
+                    "reps_min": 10,
+                    "reps_max": 15
+                },
+                {
+                    "name": "Crunchs",
+                    "series": 4,
+                    "reps_min": 10,
+                    "reps_max": 15
+                }
+            ]
+        },
+        "friday": {
+            "exercises": [
+                {
+                    "name": "Pull Up",
+                    "series": 3,
+                    "reps_min": 5,
+                    "reps_max": 9
+                },
+                {
+                    "name": "Barbell Row",
+                    "series": 3,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Dumbbell Row",
+                    "series": 3,
+                    "reps_min": 8,
+                    "reps_max": 12
+                },
+                {
+                    "name": "Biceps Curl",
+                    "series": 3,
+                    "reps_min": 10,
+                    "reps_max": 15
+                }
+            ]
+        }
+    }
+}
