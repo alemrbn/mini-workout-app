@@ -2,7 +2,9 @@ from utils import (
     clear_screen,
     global_messages,
     check_empty_list,
-    list_workouts
+    list_workouts,
+    is_nonempty_string,
+    is_positive_int
 )
 
 
@@ -48,7 +50,10 @@ class CreateWorkout:
             workout_name_input = input(
                 self.CREATE_WORKOUT_MESSAGES['ask_workout_name']
                 ).strip()
-            if workout_name_input.isdigit() or len(workout_name_input) < 1:
+            if (
+                not is_nonempty_string(workout_name_input)
+                or workout_name_input.isdigit()
+            ):
                 print(self.CREATE_WORKOUT_MESSAGES['invalid_workout_name'])
                 continue
             else:
@@ -62,7 +67,10 @@ class CreateWorkout:
             exercise_name_input = input(
                 self.CREATE_WORKOUT_MESSAGES['ask_exercise_name']
                 ).strip()
-            if exercise_name_input.isdigit() or len(exercise_name_input) < 1:
+            if (
+                is_nonempty_string(exercise_name_input)
+                or exercise_name_input.isdigit()
+            ):
                 print(self.CREATE_WORKOUT_MESSAGES['invalid_exercise_name'])
                 continue
             else:
@@ -76,7 +84,7 @@ class CreateWorkout:
             exercise_series_input = input(
                 self.CREATE_WORKOUT_MESSAGES['ask_exercise_series']
                 ).strip()
-            if not exercise_series_input.isdigit():
+            if not is_positive_int(exercise_series_input):
                 print(self.CREATE_WORKOUT_MESSAGES['empty_exercise_series'])
                 continue
             exercise_series = int(exercise_series_input)
@@ -94,8 +102,8 @@ class CreateWorkout:
                 self.CREATE_WORKOUT_MESSAGES['ask_exercise_reps_max']
                 ).strip()
             check_inputs_is_digit = (
-                not exercise_reps_min_input.isdigit() or
-                not exercise_reps_max_input.isdigit()
+                not is_positive_int(exercise_reps_min_input) or
+                not is_positive_int(exercise_reps_max_input)
                 )
             check_inputs_is_empty = (
                 exercise_reps_min_input == '' or

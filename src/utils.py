@@ -30,3 +30,11 @@ def list_workouts(msg, workouts):
         f"({len(workouts)}):\n"
     )
     return message
+
+
+def is_nonempty_string(value):
+    return isinstance(value, str) and value.string() != ""
+
+
+def is_positive_int(value):
+    return value.isdigit() and int(value) > 0
