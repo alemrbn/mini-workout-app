@@ -3,8 +3,7 @@ from utils import (
     global_messages,
     check_empty_list,
     list_workouts,
-    is_nonempty_string,
-    is_positive_int
+    is_nonempty_string
 )
 
 
@@ -43,6 +42,41 @@ class CreateWorkout:
         self.storage = storage
         self.workout_data = {}
 
+    def validate_workout_name(self, name):
+        if not is_nonempty_string(name) or name.isdigit():
+            raise ValueError(self.CREATE_WORKOUT_MESSAGES[
+                'invalid_workout_name']
+                )
+        return name.strip().title()
+
+    def validate_exercise_name(self, name):
+        if not is_nonempty_string(name) or name.isdigit():
+            raise ValueError(self.CREATE_WORKOUT_MESSAGES[
+                'invalid_exercise_name'
+            ])
+        return name.strip().title()
+
+    def validate_series(self, value):
+        if not value.isdigit() or int(value) <= 0:
+            raise ValueError(self.CREATE_WORKOUT_MESSAGES[
+                'empty_exercise_series'
+            ])
+        return int(value)
+
+    def validate_reps_min(self, value):
+        if not value.isdigit() or int(value) <= 0:
+            raise ValueError(self.CREATE_WORKOUT_MESSAGES[
+                'invalid_exercise_reps'
+                ])
+        return int(value)
+
+    def validate_reps_max(self, value, reps_min):
+        if not value.isdigit() or int(value) < reps_min:
+            raise ValueError(self.CREATE_WORKOUT_MESSAGES[
+                'invalid_exercise_reps'
+                ])
+        return int(value)
+
     def ask_workout_name(self):
         clear_screen()
         workout_name = ''
@@ -50,14 +84,11 @@ class CreateWorkout:
             workout_name_input = input(
                 self.CREATE_WORKOUT_MESSAGES['ask_workout_name']
                 ).strip()
-            if (
-                not is_nonempty_string(workout_name_input)
-                or workout_name_input.isdigit()
-            ):
+            try:
+                workout_name = self.validate_workout_name(workout_name_input)
+            except ValueError:
                 print(self.CREATE_WORKOUT_MESSAGES['invalid_workout_name'])
                 continue
-            else:
-                workout_name = workout_name_input.strip().title()
         return workout_name
 
     def ask_exercise_name(self):
@@ -67,56 +98,52 @@ class CreateWorkout:
             exercise_name_input = input(
                 self.CREATE_WORKOUT_MESSAGES['ask_exercise_name']
                 ).strip()
-            if (
-                is_nonempty_string(exercise_name_input)
-                or exercise_name_input.isdigit()
-            ):
+            try:
+                exercise_name = self.validate_exercise_name(
+                    exercise_name_input
+                    )
+            except ValueError:
                 print(self.CREATE_WORKOUT_MESSAGES['invalid_exercise_name'])
                 continue
-            else:
-                exercise_name = exercise_name_input.title()
         return exercise_name
 
     def ask_exercise_series(self):
         clear_screen()
-        exercise_series = 0
-        while exercise_series <= 0:
-            exercise_series_input = input(
+        series = 0
+        while series <= 0:
+            series_input = input(
                 self.CREATE_WORKOUT_MESSAGES['ask_exercise_series']
-                ).strip()
-            if not is_positive_int(exercise_series_input):
+            ).strip()
+            try:
+                series = self.validate_series(series_input)
+            except ValueError:
                 print(self.CREATE_WORKOUT_MESSAGES['empty_exercise_series'])
                 continue
-            exercise_series = int(exercise_series_input)
-        return exercise_series
+        return series
 
     def ask_exercise_reps(self):
         clear_screen()
-        exercise_reps_min = 0
-        exercise_reps_max = 0
-        while exercise_reps_min <= 0 or exercise_reps_max <= 0:
-            exercise_reps_min_input = input(
+        reps_min = 0
+        while reps_min <= 0:
+            reps_min_input = input(
                 self.CREATE_WORKOUT_MESSAGES['ask_exercise_reps_min']
-                ).strip()
-            exercise_reps_max_input = input(
-                self.CREATE_WORKOUT_MESSAGES['ask_exercise_reps_max']
-                ).strip()
-            check_inputs_is_digit = (
-                not is_positive_int(exercise_reps_min_input) or
-                not is_positive_int(exercise_reps_max_input)
-                )
-            check_inputs_is_empty = (
-                exercise_reps_min_input == '' or
-                exercise_reps_max_input == ''
-                )
-            if check_inputs_is_digit or check_inputs_is_empty:
+            ).strip()
+            try:
+                reps_min = self.validate_reps_min(reps_min_input)
+            except ValueError:
                 print(self.CREATE_WORKOUT_MESSAGES['invalid_exercise_reps'])
                 continue
-            exercise_reps_min_input_int = int(exercise_reps_min_input)
-            exercise_reps_max_input_int = int(exercise_reps_max_input)
-            exercise_reps_min = exercise_reps_min_input_int
-            exercise_reps_max = exercise_reps_max_input_int
-        return exercise_reps_min, exercise_reps_max
+        reps_max = 0
+        while reps_max < reps_min:
+            reps_max_input = input(
+                self.CREATE_WORKOUT_MESSAGES['ask_exercise_reps_max']
+            ).strip()
+            try:
+                reps_max = self.validate_reps_max(reps_max_input, reps_min)
+            except ValueError:
+                print(self.CREATE_WORKOUT_MESSAGES['invalid_exercise_reps'])
+                continue
+        return reps_min, reps_max
 
     def build_workout(self):
         workout_name = self.ask_workout_name()

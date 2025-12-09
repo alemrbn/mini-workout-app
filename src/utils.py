@@ -33,7 +33,7 @@ def list_workouts(msg, workouts):
 
 
 def is_nonempty_string(value):
-    return isinstance(value, str) and value.string() != ""
+    return isinstance(value, str) and value.strip() != ""
 
 
 def is_positive_int(value):
