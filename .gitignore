@@ -1,1 +1,5 @@
 .venv
+__pycache__
+*.pyc
+.workouts_data/*
+!workouts_data/Example.json
