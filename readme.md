@@ -4,4 +4,4 @@
 
 ### Run
 
-`cd mini-workout-app && py src/main.py`
+`cd mini-workout-app && py -m src.main`
