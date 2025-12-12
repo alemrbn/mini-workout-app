@@ -30,7 +30,10 @@ class ListWorkout(WorkoutAction):
 
     def format_workout(self, workout):
         workout_name = f"Workout: {workout['name']}\n"
+        workout_description = workout.get('description', None)
         output = workout_name
+        if workout_description:
+            output += f"Description: {workout['description']}\n"
         for day, info in workout['days'].items():
             output += f'\n{day.capitalize()}:\n'
             for exercises in info['exercises']:

@@ -91,5 +91,6 @@
                 }
             ]
         }
-    }
+    },
+    "description": "This is a description.\nHere I broke a line\n\nHere I broke two lines\nBye."
 }

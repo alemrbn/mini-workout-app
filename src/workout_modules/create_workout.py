@@ -34,6 +34,12 @@ class CreateWorkout:
         'choose_day': '\nChoose a day or type [d]one to finish: ',
         'no_days_selected': 'You must select at least one day.',
         'invalid_day': 'Please choose a valid day.',
+        'ask_description': (
+           'Would you like to add a description?\n'
+           '(Use :break: to break line)\n'
+           '[y]es / [no] '
+        ),
+        'description': 'Enter your description:\n\n',
         'complete_workout': 'Workout created successfully!'
     }
 
@@ -159,6 +165,27 @@ class CreateWorkout:
                     clear_screen()
                     print(global_messages['invalid_input'])
 
+    def _ask_description(self):
+        clear_screen()
+        while True:
+            ask_description = input(self.CREATE_WORKOUT_MESSAGES['ask_description'])
+            if ask_description in ['n', 'no']:
+                clear_screen()
+                break
+            elif ask_description in ['y', 'yes']:
+                while True:
+                    clear_screen()
+                    line_break = ':break:'
+                    description = input(self.CREATE_WORKOUT_MESSAGES['description'])
+                    description = description.replace(line_break, '\n')
+                    self.workout_data['description'] = description
+                    break
+                break
+            else:
+                clear_screen()
+                print(global_messages['invalid_input'])
+
+
     def build_workout(self):
         workout_name = self._ask_workout_name()
         clear_screen()
@@ -176,6 +203,7 @@ class CreateWorkout:
             self.workout_data['days'][chosen_day] = {'exercises': []}
             self._ask_exercises_for_day(chosen_day)
             available_days.remove(chosen_day)
+        self._ask_description()
         clear_screen()
         self.storage.save_workout(self.workout_data)
         print(self.CREATE_WORKOUT_MESSAGES['complete_workout'])
