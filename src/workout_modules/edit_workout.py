@@ -124,6 +124,7 @@ class EditWorkout(WorkoutAction):
                         self.EDIT_WORKOUT_MESSAGES['new_name']
                         ).strip().title()
                     exercise['name'] = new_name
+                    self.storage.save_workout(workout)
                     clear_screen()
                     break
                 else:
@@ -163,6 +164,7 @@ class EditWorkout(WorkoutAction):
                                 print(global_messages['invalid_input'])
                                 continue
                             exercise['series'] = new_series_number
+                            self.storage.save_workout(workout)
                             break
                         except ValueError:
                             print(global_messages['invalid_input'])
@@ -220,6 +222,7 @@ class EditWorkout(WorkoutAction):
                             print(global_messages['invalid_input'])
                     exercise['reps_min'] = new_min
                     exercise['reps_max'] = new_max
+                    self.storage.save_workout(workout)
                     clear_screen()
                     break
                 else:
@@ -241,5 +244,6 @@ class EditWorkout(WorkoutAction):
         new_desc = format_line_breaks(new_desc_input)
         if new_desc.strip():
             workout['description'] = new_desc
+            self.storage.save_workout(workout)
             clear_screen()
         clear_screen()
