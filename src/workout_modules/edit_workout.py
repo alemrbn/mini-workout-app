@@ -13,6 +13,7 @@ class EditWorkout(WorkoutAction):
         'invalid_edit_workout_option': 'Invalid option.',
         'available_for_edit': 'Available for editing:\n',
         'ask_edit_workout_item': 'Which item do you want to edit? ',
+        'successfully_edit': 'Successfully edited!',
         'ask_new_workout_name': 'What name would you like to use? ',
         'current_description': 'Your current description:\n\n',
         'new_description': 'New description (Enter to keep):\n\n',
@@ -20,7 +21,7 @@ class EditWorkout(WorkoutAction):
         'new_name': 'New name: ',
         'ask_edit_series': '\nWhich exercise series do you want to edit? ',
         'new_series_number': 'How many series? ',
-        'ask_edit_reps': 'Select the exercise number to edit repetitions: ',
+        'ask_edit_reps': '\nSelect the exercise number to edit repetitions: ',
         'new_min_reps': 'Enter the new minimum repetitions: ',
         'new_max_reps': 'Enter the new maximum repetitions: '
     }
@@ -34,8 +35,7 @@ class EditWorkout(WorkoutAction):
         )
         if not selected_workout:
             return
-        editing = True
-        while editing:
+        while True:
             available_options = [
                 'rename workout',
                 'rename exercise',
@@ -56,32 +56,42 @@ class EditWorkout(WorkoutAction):
             ).strip().lower()
             if edit_input_option in ['b', 'back']:
                 clear_screen()
-                break
+                return self.edit_workout()
             if edit_input_option == '0':
                 self.rename_workout(
                     selected_workout,
                     workout_name_msg
                 )
+                print(self.EDIT_WORKOUT_MESSAGES['successfully_edit'])
+                break
             if edit_input_option == '1':
                 self.rename_exercise(
                     selected_workout,
                     workout_name_msg
                 )
+                print(self.EDIT_WORKOUT_MESSAGES['successfully_edit'])
+                break
             if edit_input_option == '2':
                 self.edit_series(
                     selected_workout,
                     workout_name_msg
                 )
+                print(self.EDIT_WORKOUT_MESSAGES['successfully_edit'])
+                break
             if edit_input_option == '3':
                 self.edit_reps(
                     selected_workout,
                     workout_name_msg
                 )
+                print(self.EDIT_WORKOUT_MESSAGES['successfully_edit'])
+                break
             elif edit_input_option == '4':
                 self.description_edit(
                     selected_workout,
                     workout_name_msg
                 )
+                print(self.EDIT_WORKOUT_MESSAGES['successfully_edit'])
+                break
             else:
                 clear_screen()
                 print(
@@ -89,8 +99,7 @@ class EditWorkout(WorkoutAction):
                 )
 
     def rename_workout(self, workout, title_msg):
-        rename_workout_flag = True
-        while rename_workout_flag:
+        while True:
             clear_screen()
             print(title_msg)
             new_workout_name = input(
@@ -101,8 +110,8 @@ class EditWorkout(WorkoutAction):
             self.storage.rename_workout_file(
                 old_name, new_workout_name, workout
             )
-            rename_workout_flag = False
             clear_screen()
+            break
 
     def rename_exercise(self, workout, title_msg):
         clear_screen()
@@ -187,8 +196,9 @@ class EditWorkout(WorkoutAction):
                     exercises.append((day_name, exercise))
             for i, (day_name, exercise) in enumerate(exercises):
                 print(
-                    f"{i}) {exercise['name']} ({day_name.capitalize()}) - "
-                    f"{exercise['reps_min']}-{exercise['reps_max']} reps"
+                    f"{i}) {exercise['name']} "
+                    f"{exercise['reps_min']}-{exercise['reps_max']} reps "
+                    f"({day_name.capitalize()})"
                 )
             selected = input(self.EDIT_WORKOUT_MESSAGES['ask_edit_reps'])
             if selected.isdigit():
@@ -235,7 +245,7 @@ class EditWorkout(WorkoutAction):
     def description_edit(self, workout, title_msg):
         clear_screen()
         print(title_msg)
-        current_desc = workout['description']
+        current_desc = workout.get('description') or None
         print(
             f"{self.EDIT_WORKOUT_MESSAGES['current_description']}"
             f"{current_desc}\n"
@@ -245,5 +255,4 @@ class EditWorkout(WorkoutAction):
         if new_desc.strip():
             workout['description'] = new_desc
             self.storage.save_workout(workout)
-            clear_screen()
         clear_screen()

@@ -25,21 +25,20 @@ class DeleteWorkout(WorkoutAction):
         if not workout_to_delete:
             return
         workout_to_delete_name = workout_to_delete["name"]
-        user_response = False
-        while not user_response:
+        while True:
             sure_or_not = input(
                 self.DELETE_WORKOUT_MESSAGES['ask_sure_delete']
             ).strip().lower()
             if sure_or_not in ['y', 'yes']:
                 self.storage.delete_workout(workout_to_delete_name)
-                user_response = True
                 clear_screen()
                 print(
                     self.DELETE_WORKOUT_MESSAGES['successfully_deleted']
                 )
+                break
             elif sure_or_not in ['n', 'no']:
-                user_response = True
                 clear_screen()
+                return self.delete_workout()
             else:
                 clear_screen()
                 print(global_messages['invalid_input'])
