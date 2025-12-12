@@ -140,7 +140,3 @@ Run the app:
     python -m src.main
 
 Follow the on-screen instructions to create or manage workouts.
-
-## License
-
-This project is licensed under the MIT License.
