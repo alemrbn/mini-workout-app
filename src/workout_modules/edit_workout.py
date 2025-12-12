@@ -3,7 +3,9 @@ from ..utils import (
     global_messages,
     clear_screen,
     check_empty_list,
-    format_line_breaks
+    format_line_breaks,
+    validate_is_digit,
+    validate_positive_int
 )
 
 class EditWorkout(WorkoutAction):
@@ -14,7 +16,9 @@ class EditWorkout(WorkoutAction):
         'ask_edit_workout_item': 'Which item do you want to edit? ',
         'ask_new_workout_name': 'What name would you like to use? ',
         'current_description': 'Your current description:\n\n',
-        'new_description': 'New description (Enter to keep):\n\n'
+        'new_description': 'New description (Enter to keep):\n\n',
+        'ask_rename_exercise': '\nWhich exercise do you want to rename? ',
+        'new_name': 'New name: '
     }
 
     def edit_workout(self):
@@ -32,7 +36,7 @@ class EditWorkout(WorkoutAction):
                 '-== This menu is still under development.. ==-\n'
             )
             print(under_development)
-            available_options = ['rename workout', 'edit description']
+            available_options = ['rename workout', 'rename exercise', 'edit description']
             workout_name_msg = (
                 f"Workout: {selected_workout['name']}\n"
             )
@@ -53,7 +57,12 @@ class EditWorkout(WorkoutAction):
                     selected_workout,
                     workout_name_msg
                 )
-            elif edit_input_option == '1':
+            if edit_input_option == '1':
+                self.rename_exercise(
+                    selected_workout,
+                    workout_name_msg
+                )
+            elif edit_input_option == '2':
                 self.description_edit(
                     selected_workout,
                     workout_name_msg
@@ -79,6 +88,33 @@ class EditWorkout(WorkoutAction):
             )
             rename_workout_flag = False
             clear_screen()
+
+    def rename_exercise(self, workout, title_msg):
+        clear_screen()
+        while True:
+            print(title_msg)
+            exercises = []
+            for day_name, info in workout['days'].items():
+                for exercise in info['exercises']:
+                    exercises.append((day_name, exercise))
+            for i, (day_name, exercise) in enumerate(exercises):
+                print(f"{i}) {exercise['name']} ({day_name.capitalize()})")
+            selected = input(self.EDIT_WORKOUT_MESSAGES['ask_rename_exercise'])
+            if selected.isdigit():
+                index = int(selected)
+                if 0 <= index < len(exercises):
+                    day_name, exercise = exercises[index]
+                    clear_screen()
+                    new_name = input(self.EDIT_WORKOUT_MESSAGES['new_name']).strip().title()
+                    exercise['name'] = new_name
+                    clear_screen()
+                    break
+                else:
+                    clear_screen()
+                    print(global_messages['invalid_input'])
+            else:
+                clear_screen()
+                print(global_messages['invalid_input'])
 
     def description_edit(self, workout, title_msg):
         clear_screen()
