@@ -18,7 +18,9 @@ class EditWorkout(WorkoutAction):
         'current_description': 'Your current description:\n\n',
         'new_description': 'New description (Enter to keep):\n\n',
         'ask_rename_exercise': '\nWhich exercise do you want to rename? ',
-        'new_name': 'New name: '
+        'new_name': 'New name: ',
+        'ask_edit_series': '\nWhich exercise series do you want to edit? ',
+        'new_series_number': 'How many series? '
     }
 
     def edit_workout(self):
@@ -36,7 +38,7 @@ class EditWorkout(WorkoutAction):
                 '-== This menu is still under development.. ==-\n'
             )
             print(under_development)
-            available_options = ['rename workout', 'rename exercise', 'edit description']
+            available_options = ['rename workout', 'rename exercise', 'edit series', 'edit description']
             workout_name_msg = (
                 f"Workout: {selected_workout['name']}\n"
             )
@@ -62,7 +64,12 @@ class EditWorkout(WorkoutAction):
                     selected_workout,
                     workout_name_msg
                 )
-            elif edit_input_option == '2':
+            if edit_input_option == '2':
+                self.edit_series(
+                    selected_workout,
+                    workout_name_msg
+                )
+            elif edit_input_option == '3':
                 self.description_edit(
                     selected_workout,
                     workout_name_msg
@@ -107,6 +114,41 @@ class EditWorkout(WorkoutAction):
                     clear_screen()
                     new_name = input(self.EDIT_WORKOUT_MESSAGES['new_name']).strip().title()
                     exercise['name'] = new_name
+                    clear_screen()
+                    break
+                else:
+                    clear_screen()
+                    print(global_messages['invalid_input'])
+            else:
+                clear_screen()
+                print(global_messages['invalid_input'])
+
+    def edit_series(self, workout, title_msg):
+        clear_screen()
+        while True:
+            print(title_msg)
+            exercises = []
+            for day_name, info in workout['days'].items():
+                for exercise in info['exercises']:
+                    exercises.append((day_name, exercise))
+            for i, (day_name, exercise) in enumerate(exercises):
+                print(f"{i}) {exercise['name']} {exercise['series']}x ({day_name.capitalize()})")
+            selected = input(self.EDIT_WORKOUT_MESSAGES['ask_edit_series'])
+            if selected.isdigit():
+                index = int(selected)
+                if 0 <= index < len(exercises):
+                    day_name, exercise = exercises[index]
+                    clear_screen()
+                    while True:
+                        try:
+                            new_series_number = int(input(self.EDIT_WORKOUT_MESSAGES['new_series_number']).strip())
+                            if new_series_number <= 0:
+                                print(global_messages['invalid_input'])
+                                continue
+                            exercise['series'] = new_series_number
+                            break
+                        except ValueError:
+                            print(global_messages['invalid_input'])
                     clear_screen()
                     break
                 else:
