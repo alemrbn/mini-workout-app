@@ -7,6 +7,7 @@ from ..utils import (
     format_line_breaks
 )
 
+
 class CreateWorkout:
     DAYS = ['monday',
             'tuesday',
@@ -169,14 +170,18 @@ class CreateWorkout:
     def _ask_description(self):
         clear_screen()
         while True:
-            ask_description = input(self.CREATE_WORKOUT_MESSAGES['ask_description'])
+            ask_description = input(
+                self.CREATE_WORKOUT_MESSAGES['ask_description']
+                )
             if ask_description in ['n', 'no']:
                 clear_screen()
                 break
             elif ask_description in ['y', 'yes']:
                 while True:
                     clear_screen()
-                    description_input = input(self.CREATE_WORKOUT_MESSAGES['description'])
+                    description_input = input(
+                        self.CREATE_WORKOUT_MESSAGES['description']
+                        )
                     description = format_line_breaks(description_input)
                     self.workout_data['description'] = description
                     break
@@ -184,7 +189,6 @@ class CreateWorkout:
             else:
                 clear_screen()
                 print(global_messages['invalid_input'])
-
 
     def build_workout(self):
         workout_name = self._ask_workout_name()
@@ -199,7 +203,7 @@ class CreateWorkout:
                     clear_screen()
                     print(self.CREATE_WORKOUT_MESSAGES['no_days_selected'])
                     continue
-                break  
+                break
             self.workout_data['days'][chosen_day] = {'exercises': []}
             self._ask_exercises_for_day(chosen_day)
             available_days.remove(chosen_day)

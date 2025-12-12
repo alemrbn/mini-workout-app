@@ -3,10 +3,9 @@ from ..utils import (
     global_messages,
     clear_screen,
     check_empty_list,
-    format_line_breaks,
-    validate_is_digit,
-    validate_positive_int
+    format_line_breaks
 )
+
 
 class EditWorkout(WorkoutAction):
     EDIT_WORKOUT_MESSAGES = {
@@ -29,7 +28,7 @@ class EditWorkout(WorkoutAction):
     def edit_workout(self):
         clear_screen()
         if check_empty_list(self.storage.workouts):
-            return   
+            return
         selected_workout = self._list_and_select_workout(
             self.EDIT_WORKOUT_MESSAGES['ask_edit_workout']
         )
@@ -37,7 +36,13 @@ class EditWorkout(WorkoutAction):
             return
         editing = True
         while editing:
-            available_options = ['rename workout', 'rename exercise', 'edit series', 'edit reps', 'edit description']
+            available_options = [
+                'rename workout',
+                'rename exercise',
+                'edit series',
+                'edit reps',
+                'edit description'
+                ]
             workout_name_msg = (
                 f"Workout: {selected_workout['name']}\n"
             )
@@ -46,10 +51,9 @@ class EditWorkout(WorkoutAction):
             for i, option in enumerate(available_options):
                 print(f'{i}) {option.title()}')
             print(f"\n{global_messages['back']}")
-            
             edit_input_option = input(
                 self.EDIT_WORKOUT_MESSAGES['ask_edit_workout_item']
-            ).strip().lower() 
+            ).strip().lower()
             if edit_input_option in ['b', 'back']:
                 clear_screen()
                 break
@@ -116,7 +120,9 @@ class EditWorkout(WorkoutAction):
                 if 0 <= index < len(exercises):
                     day_name, exercise = exercises[index]
                     clear_screen()
-                    new_name = input(self.EDIT_WORKOUT_MESSAGES['new_name']).strip().title()
+                    new_name = input(
+                        self.EDIT_WORKOUT_MESSAGES['new_name']
+                        ).strip().title()
                     exercise['name'] = new_name
                     clear_screen()
                     break
@@ -136,7 +142,10 @@ class EditWorkout(WorkoutAction):
                 for exercise in info['exercises']:
                     exercises.append((day_name, exercise))
             for i, (day_name, exercise) in enumerate(exercises):
-                print(f"{i}) {exercise['name']} {exercise['series']}x ({day_name.capitalize()})")
+                print(
+                    f"{i}) {exercise['name']} {exercise['series']}x "
+                    f"({day_name.capitalize()})"
+                )
             selected = input(self.EDIT_WORKOUT_MESSAGES['ask_edit_series'])
             if selected.isdigit():
                 index = int(selected)
@@ -145,7 +154,11 @@ class EditWorkout(WorkoutAction):
                     clear_screen()
                     while True:
                         try:
-                            new_series_number = int(input(self.EDIT_WORKOUT_MESSAGES['new_series_number']).strip())
+                            new_series_number = int(
+                                input(self.EDIT_WORKOUT_MESSAGES[
+                                    'new_series_number'
+                                    ]).strip()
+                                )
                             if new_series_number <= 0:
                                 print(global_messages['invalid_input'])
                                 continue
@@ -171,7 +184,10 @@ class EditWorkout(WorkoutAction):
                 for exercise in info['exercises']:
                     exercises.append((day_name, exercise))
             for i, (day_name, exercise) in enumerate(exercises):
-                print(f"{i}) {exercise['name']} ({day_name.capitalize()}) - {exercise['reps_min']}-{exercise['reps_max']} reps")
+                print(
+                    f"{i}) {exercise['name']} ({day_name.capitalize()}) - "
+                    f"{exercise['reps_min']}-{exercise['reps_max']} reps"
+                )
             selected = input(self.EDIT_WORKOUT_MESSAGES['ask_edit_reps'])
             if selected.isdigit():
                 index = int(selected)
@@ -180,7 +196,11 @@ class EditWorkout(WorkoutAction):
                     clear_screen()
                     while True:
                         try:
-                            new_min = int(input(self.EDIT_WORKOUT_MESSAGES['new_min_reps']).strip())
+                            new_min = int(
+                                input(self.EDIT_WORKOUT_MESSAGES[
+                                    'new_min_reps'
+                                    ]).strip()
+                                )
                             if new_min <= 0:
                                 print(global_messages['invalid_input'])
                                 continue
@@ -189,7 +209,9 @@ class EditWorkout(WorkoutAction):
                             print(global_messages['invalid_input'])
                     while True:
                         try:
-                            new_max = int(input(self.EDIT_WORKOUT_MESSAGES['new_max_reps']).strip())
+                            new_max = int(input(
+                                self.EDIT_WORKOUT_MESSAGES['new_max_reps']
+                                ).strip())
                             if new_max < new_min:
                                 print(global_messages['invalid_input'])
                                 continue
@@ -207,12 +229,14 @@ class EditWorkout(WorkoutAction):
                 clear_screen()
                 print(global_messages['invalid_input'])
 
-
     def description_edit(self, workout, title_msg):
         clear_screen()
         print(title_msg)
         current_desc = workout['description']
-        print(f"{self.EDIT_WORKOUT_MESSAGES['current_description']}{current_desc}\n")
+        print(
+            f"{self.EDIT_WORKOUT_MESSAGES['current_description']}"
+            f"{current_desc}\n"
+        )
         new_desc_input = input(self.EDIT_WORKOUT_MESSAGES['new_description'])
         new_desc = format_line_breaks(new_desc_input)
         if new_desc.strip():

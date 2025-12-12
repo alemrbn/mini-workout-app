@@ -5,6 +5,7 @@ from ..utils import (
     check_empty_list
 )
 
+
 class ListWorkout(WorkoutAction):
     LIST_WORKOUT_MESSAGES = {
         'view_workout': 'Which workout would you like to view? '
